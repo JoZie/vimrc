@@ -103,7 +103,9 @@
     let Tlist_Exit_OnlyWindow=1
     " add settings for LaTeX files
     let tlist_tex_settings= 'latex;s:sections;g:graphics;l:labels'
-
+    " add settings for UPC files
+    let tlist_upc_settings = 'c;d:macro;g:enum;s:struct;u:union;t:typedef;' .
+                           \ 'v:variable;f:function'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Vim UI settings
