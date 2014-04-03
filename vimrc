@@ -45,14 +45,13 @@
     Plugin 'tpope/vim-repeat'
     " A code-completion engine for Vim
     Plugin 'Valloric/YouCompleteMe'
-   " The ultimate vim statusline utility.
-   Plugin 'Lokaltog/vim-powerline'
+    " The ultimate vim statusline utility.
+    Plugin 'Lokaltog/vim-powerline'
 
 "" Color schemes ""
 """""""""""""""""""
-   Plugin 'sjl/badwolf'
-   Plugin 'vim-scripts/summerfruit256.vim'
-
+    Plugin 'sjl/badwolf'
+    Plugin 'vim-scripts/summerfruit256.vim'
 
     filetype plugin indent on
 
@@ -78,8 +77,19 @@
     " Necessary to show Unicode glyphs
     set encoding=utf-8
 
-" Automatic LaTeX Pugin ""
+"" Mini Buffer Explorer ""
 """"""""""""""""""""""""""
+    map <Leader>e :MBEOpen<cr>
+    map <Leader>c :MBEClose<cr>
+    map <Leader>t :MBEToggle<cr>
+    " disable autostart
+    let g:miniBufExplorerAutoStart = 0
+    " debugging settings
+    "let g:miniBufExplDebugMode  = 1
+    "let g:miniBufExplDebugLevel = 10
+
+"" Automatic LaTeX Pugin ""
+"""""""""""""""""""""""""""
     filetype plugin on
     syntax on
     " disable automatic compilation of LaTeX
@@ -87,17 +97,19 @@
     " disable generation of '.project.vim' file
     let g:atp_ProjectScript=0
 
-" YouCompleteMe ""
-""""""""""""""""""
+"" YouCompleteMe ""
+"""""""""""""""""""
     " keys to move down through completion list
     let g:ycm_key_list_select_completion = ['<TAB>']
     " keys to move up through completion list
     let g:ycm_key_list_previous_completion = ['<S-TAB>']
-    " confirmation of loading .ycm_extra_conf.py needed?
-	let g:ycm_confirm_extra_conf = 0
+    " switchoff confirmation of loading .ycm_extra_conf.py
+    let g:ycm_confirm_extra_conf = 0
+    " enable completion in all filetypes
+    let g:ycm_filetype_blacklist = {}
 
-" Taglist ""
-""""""""""""
+"" Taglist ""
+"""""""""""""
     let Tlist_Auto_Open=1
     let Tlist_Use_Right_Window=1
     let Tlist_Exit_OnlyWindow=1
@@ -117,8 +129,8 @@
     " cd to dir of file in buffer
     autocmd BufEnter,BufRead * silent! lcd %:p:h
 
-" GUI settings ""
-"""""""""""""""""
+"" GUI settings ""
+""""""""""""""""""
     " use 256 colors
     set t_Co=256
     " select colorscheme
@@ -128,37 +140,49 @@
     " show linenumbers
     set number
     " always show tabline
-    set showtabline=2
+    set showtabline=1
 
-" Highlighting ""
-"""""""""""""""""
+"" Highlighting ""
+""""""""""""""""""
     " swich-on syntax highlighting
     syntax on
     " highlight current cursor line
     set cursorline
     " highlight specific column
     set colorcolumn=100
+    " highlight unwanted spaces
+    set list
+    set lcs=tab:░░,trail:█
 
-" Tabstop & indentions ""
-"""""""""""""""""""""""""
+"" Folding ""
+"""""""""""""
+    " foldmethod
+    set fdm=syntax
+    " width of fold column
+    set fdc=1
+    " open folds automatically
+    autocmd Syntax * normal zR
+
+"" Tabstop & indentions ""
+""""""""""""""""""""""""""
     " columns used per <TAB>
     set tabstop=4
     " columns for indention with << & >>
     set shiftwidth=4
     " keep indention from previous line
-   v set autoindent
+    set autoindent
     " insert extra level of indention if needed
     set smartindent
 
-" File settings ""
-""""""""""""""""""
+"" File settings ""
+"""""""""""""""""""
     " use utf-8 for fileencoding
     set encoding=utf-8
     " Don't use .swp files
     set noswapfile
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Key mappings
+"" Key mappings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     " disable Arrow in insert mode
@@ -166,3 +190,53 @@
     ino <right> <Nop>
     ino <left> <Nop>
     ino <Down> <Nop>
+
+""  F-Button remapping ""
+"""""""""""""""""""""""""
+    " toggle hlsearch
+    nnoremap <F5> :set hlsearch! hlsearch?<CR>
+    " do beautification
+    nnoremap <F6> :w <CR> :call Uncrustify() <CR> :w <CR>
+
+    " Toggle NERDTree
+    nnoremap <F9> :ToggleNERDTree <CR>
+    " Toggle Taglist
+    nnoremap <F10> :TlistToggle <CR>
+    " Toggle extra tab for compilaion
+    map <F11> :call ToggleBuildTab() <CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim script functions
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"" Code beautification ""
+"""""""""""""""""""""""""
+    function! Uncrustify()
+        let cmd = '%!uncrustify -q -c '
+
+        let cfg = g:ProjectRoot
+        let cfg .= 'uncrustify.cfg'
+
+        if exists("cfg") && filereadable(cfg)
+            let cmd .= cfg
+        else
+            let cmd .= '~/.uncrustify.cfg'
+        endif
+        let cmd .= ' -f %'
+
+        echo cmd
+        execute cmd
+    endfunction
+
+"" A Tab for compilation ""
+"""""""""""""""""""""""""""
+    let s:buildTab = 'off'
+    function! ToggleBuildTab()
+        if s:buildTab == 'off'
+            :tabnew | :tabm 0  | :copen
+            let s:buildTab = 'on'
+        else
+            :tabclose 1
+            let s:buildTab = 'off'
+        endif
+    endfunction
