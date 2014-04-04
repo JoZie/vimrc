@@ -36,7 +36,7 @@
     " A tree explorer plugin for vim.
     Plugin 'scrooloose/nerdtree'
     " It tries to find out root project directory in NERD_tree.
-    Plugin 'JohannesZiegenbalg/NERD_tree-Project'
+    Plugin 'git@github.com:JohannesZiegenbalg/NERD-tree-project.git'
     " Source code browser
     Plugin 'vim-scripts/taglist.vim'
     " quoting/parenthesizing made simple
@@ -215,7 +215,7 @@
         let cmd = '%!uncrustify -q -c '
 
         let cfg = g:ProjectRoot
-        let cfg .= 'uncrustify.cfg'
+        let cfg .= '/uncrustify.cfg'
 
         if exists("cfg") && filereadable(cfg)
             let cmd .= cfg
@@ -224,7 +224,6 @@
         endif
         let cmd .= ' -f %'
 
-        echo cmd
         execute cmd
     endfunction
 
