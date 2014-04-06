@@ -128,7 +128,7 @@
     let g:lexical#spell = 0
     let g:lexical#spelllang = ['en','de',]
     let g:lexical#dictionary = ['/usr/share/dict/british-english',
-                              \ '/usr/share/dict/american-english ',
+                              \ '/usr/share/dict/american-english',
                               \ '/usr/share/dict/ngerman',]
     augroup lexical
         autocmd!
