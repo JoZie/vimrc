@@ -70,6 +70,8 @@
     Plugin 'Valloric/YouCompleteMe'
     " The ultimate vim statusline utility.
     Plugin 'Lokaltog/vim-powerline'
+    " Building on Vim’s spell-check and thesaurus/dictionary completion
+    Plugin 'reedes/vim-lexical'
 
 "" Color schemes ""
 """""""""""""""""""
@@ -119,6 +121,19 @@
     au BufRead *.tex let b:atp_autex=0
     " disable generation of '.project.vim' file
     let g:atp_ProjectScript=0
+
+"" Vim Lexical ""
+"""""""""""""""""
+    filetype plugin indent on
+    let g:lexical#spell = 0
+    let g:lexical#spelllang = ['en','de',]
+    let g:lexical#dictionary = ['/usr/share/dict/british-english',
+                              \ '/usr/share/dict/american-english ',
+                              \ '/usr/share/dict/ngerman',]
+    augroup lexical
+        autocmd!
+        autocmd FileType * call lexical#init()
+    augroup END
 
 "" YouCompleteMe ""
 """""""""""""""""""
